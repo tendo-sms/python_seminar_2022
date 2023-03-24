@@ -12,8 +12,9 @@ def read_spectrum(filepath, enc):
     Returns:
         df (DataFrame): CSVファイルを読み込んで空行を削除したデータフレーム
     """
-    # CSVファイルを読み込むには、「pd.read_csv(ファイルパス, encoding=エンコーディング」を使用しましょう。
-    # 空行の削除には、「変数 = データフレーム.dropna(how="all")」を使用しましょう。
+    df = pd.read_csv(filepath, encoding=enc)
+    df_dna = df.dropna(how="all")
+    return df_dna
 
 
 def read_info(filepath, enc):
@@ -26,13 +27,13 @@ def read_info(filepath, enc):
     Returns:
         result_dict (dict): インフォメーションファイルを読み込んで作成した辞書
     """
-    # open関数でファイルを開いて、次のようにfor文を実行すると、1行ずつデータを取り出すことができます。
-    # with open(ファイルパス, encoding=エンコーディング) as ファイルオブジェクト:
-    #     for 変数 in ファイルオブジェクト
-    #         変数を使った処理
+    with open(filepath, encoding=enc) as info:
+        result_dict = {}
+        for txtdata in info:
+            if "=" in txtdata:
+                result_dict[txtdata.split("=")[0].strip()] = txtdata.split("=")[1].strip()
 
-    # 最終的に次のような辞書を作成して、リターンしましょう
-    # {"TITLE":"Spectrum Graph", "XLABEL":"Wavelength", ・・・}
+    return result_dict
 
 
 def draw_graph(info, spect):
@@ -45,14 +46,28 @@ def draw_graph(info, spect):
     Returns:
         なし
     """
-    # 次のような流れで、グラフの作成と描画を行いましょう
-    # 1. Figureオブジェクトの作成
-    # 2. Axesオブジェクトの作成
-    # 3. 折れ線グラフのプロット
-    # 4. グラフの装飾
-    # 5. グラフを画面に表示
-    # 6. グラフを画像に保存
-    # 7. グラフをクローズ(忘れずに！)
+    # Figure/Axesオブジェクトの作成
+    figure = plt.figure()
+    ax = figure.subplots()
+
+    # 折れ線グラフのプロット
+    ax.plot(spect["Wavelength"], spect["Intensity1"], label=info["LINE1"])
+    ax.plot(spect["Wavelength"], spect["Intensity2"], label=info["LINE2"])
+
+    # グラフの装飾
+    ax.set_title(info["TITLE"])
+    ax.set_xlabel(info["XLABEL"])
+    ax.set_ylabel(info["YLABEL"])
+    ax.legend()
+
+    # グラフを画像ファイルに保存
+    figure.savefig("graph.png", dpi=100, format="png")
+
+    # グラフを画面に表示
+    plt.show()
+
+    # グラフをクローズ
+    plt.close(figure)
 
 # メイン処理
 info_dict = read_info("graph_info.txt", "cp932")

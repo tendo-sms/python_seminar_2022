@@ -12,7 +12,8 @@ def read_spectrum(filepath, enc):
     Returns:
         df (DataFrame): CSVファイルを読み込んで空行を削除したデータフレーム
     """
-    # 処理を記述
+    # CSVファイルを読み込むには、「pd.read_csv(ファイルパス, encoding=エンコーディング」を使用しましょう。
+    # 空行の削除には、「変数 = データフレーム.dropna(how="all")」を使用しましょう。
 
 
 def read_info(filepath, enc):
@@ -25,7 +26,13 @@ def read_info(filepath, enc):
     Returns:
         result_dict (dict): インフォメーションファイルを読み込んで作成した辞書
     """
-    # 処理を記述
+    # open関数でファイルを開いて、次のようにfor文を実行すると、1行ずつデータを取り出すことができます。
+    # with open(ファイルパス, encoding=エンコーディング) as ファイルオブジェクト:
+    #     for 変数 in ファイルオブジェクト
+    #         変数を使った処理
+
+    # 最終的に次のような辞書を作成して、リターンしましょう
+    # {"TITLE":"Spectrum Graph", "XLABEL":"Wavelength", ・・・}
 
 
 def draw_graph(info, spect):
@@ -38,8 +45,14 @@ def draw_graph(info, spect):
     Returns:
         なし
     """
-    # 処理を記述
-
+    # 次のような流れで、グラフの作成と描画を行いましょう
+    # 1. Figureオブジェクトの作成
+    # 2. Axesオブジェクトの作成
+    # 3. 折れ線グラフのプロット
+    # 4. グラフの装飾
+    # 5. グラフを画面に表示
+    # 6. グラフを画像に保存
+    # 7. グラフをクローズ(忘れずに！)
 
 # メイン処理
 info_dict = read_info("graph_info.txt", "cp932")
